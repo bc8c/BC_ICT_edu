@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.1.0.js" integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk=" crossorigin="anonymous"></script>     
+        <title>Document</title>
+        <script>       
+            function adder(a,b){
+                var sum;
+                sum = a + b;
+                return sum;
+            }
+        </script>
+    </head>
+    <body>
+        <br>
+        <p>더하기 계산을 위한 두 수를 입력하시오</p>
+        <label > a : </label>
+        <input type="text" name="" id="in_a">
+        <br><br>
+        <label > b : </label>
+        <input type="text" name="" id="in_b">
+        <br><br>
+        <button id="btn_add">더하기</button>
+        <button id="btn_sub">빼기</button>
+        <p hidden id="resulttext"> 결과 : </p>
+        <p id="result"> </p>
+        
+    </body>
+    <script>
+        $("#btn_add").click(()=> {
+            const a = $("#in_a").val()
+            const b = $("#in_b").val()
+            
+            var sum = adder(parseInt(a),parseInt(b))
+               
+            $("#resulttext").removeAttr("hidden")    
+            $("#result").append(sum)
+        })
+    </script>
+</html>
