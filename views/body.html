@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.1.0.js" integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk=" crossorigin="anonymous"></script>
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>HTML body 실습 페이지.</h1>
+        <hr>
+        <h2>1. form tag 실습</h2>
+        <form action="/body/data" method="post">
+            <label> 이름 : </label>
+            <input type="text" name="name"><br><br>
+            <label> 나이 : </label>
+            <input type="text" name="age"><br><br>
+            <input type="submit" value="form 이용하여 보내기">
+        </form>
+        <br>
+
+        <hr>
+        <h2>2. javascript 실습</h2>
+        <label> 이름 : </label>
+        <input type="text" id="name"><br><br>
+        <label> 나이 : </label>
+        <input type="text" id="age"><br><br>
+        <button id="btn_send"> javascript 이용하여 보내기 </button>
+    </body>
+        
+    <script>
+       $("#btn_send").click(()=>{
+            const name = $("#name").val();
+            const age = $("#age").val(); 
+
+            console.log(name, age);
+       })
+    </script>
+</html>
