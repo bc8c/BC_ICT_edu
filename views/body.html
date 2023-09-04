@@ -26,13 +26,19 @@
         <label> 나이 : </label>
         <input type="text" id="age"><br><br>
         <button id="btn_send"> javascript 이용하여 보내기 </button>
+        <div id="result"> </div>
     </body>
         
     <script>
        $("#btn_send").click(()=>{
             const name = $("#name").val();
-            const age = $("#age").val(); 
+            const age = $("#age").val();
 
+            $.post("/body/scriptdata", {name, age}, (data)=>{
+                console.log(data.age)
+                $("#result").empty();
+                $("#result").append("<p> 이름 : "+data.name+ " 나이 : "+ data.age + "</p>")
+            });
             console.log(name, age);
        })
     </script>

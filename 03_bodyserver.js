@@ -31,7 +31,16 @@ app.post('/body/data', (req,res)=>{
     const age = req.body.age;
 
     console.log(name, age);
-    res.end()
+    res.send(`<h1>name : ${name}, age : ${age}</h1>`)
+})
+
+app.post('/body/scriptdata', (req,res)=>{
+    const name = req.body.name;
+    const age = req.body.age;
+
+    console.log(name, age);
+    res_str = `{"name" : "${name}", "age" : "${age}"}`;
+    res.status(200).json(JSON.parse(res_str));
 })
 
 app.listen(PORT, HOST);
