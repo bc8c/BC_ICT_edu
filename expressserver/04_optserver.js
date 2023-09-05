@@ -14,9 +14,10 @@ app.use(express.static(path.join(__dirname, "views")));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
+//-----------------------------------------------라우터 미들웨어
 app.use("/body", bodyrouter);
 
-//-----------------------------------------------라우터 
+//-----------------------------------------------라우터 직접등록
 app.get('/aaa/bbb', (req, res)=>{
     const name = req.query.name
     const age = req.query.age
@@ -28,4 +29,3 @@ app.get('/aaa/bbb', (req, res)=>{
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
-
