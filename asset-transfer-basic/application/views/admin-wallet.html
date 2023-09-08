@@ -17,7 +17,8 @@
             <label> 관리자 PW : </label>
             <input type="text" class="form-control" id="adminpw"><br>
             <button class="btn btn-danger" id="gen-btn">인증서 생성하기</button>
-        </div>        
+        </div>
+        <div class="container" id="result"> </div>
     </body>
     <script>
         $('#gen-btn').click(()=>{
@@ -25,14 +26,9 @@
             const password = $('#adminpw').val();
 
             $.post("/admin",{id, password}, (data)=>{
-                
+                $('#result').empty()
+                $('#result').append(data.msg)                
             })
-
-            // 1. 메소드: post
-            // 2. url: /admin
-            // 3. data: 관리자ID, 관리자PW
-
-
         })
     </script>
 </html>

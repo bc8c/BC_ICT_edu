@@ -15,6 +15,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
 //-----------------------------------------------라우터 
+// 관리자용 지갑 생성 파트
 app.post("/admin", async(req, res)=>{
     const {id, password} = req.body
     console.log(id, password)
@@ -45,6 +46,8 @@ app.post("/admin", async(req, res)=>{
             console.log(
                 'An identity for the admin user "admin" already exists in the wallet'
             );
+            const res_str = `{"msg":"An identity for the admin user admin already exists in the wallet"}`;
+            res.json(JSON.parse(res_str));
             return;
         }
         // Enroll the admin user, and import the new identity into the wallet.
@@ -64,8 +67,13 @@ app.post("/admin", async(req, res)=>{
         console.log(
             'Successfully enrolled admin user "admin" and imported it into the wallet'
         );
+        const res_str = `{"msg":"관리자 지갑생성이 완료되었습니다."}`;
+        res.json(JSON.parse(res_str));
+        
     } catch (error) {
         console.error(`Failed to enroll admin user "admin": ${error}`);
+        const res_str = `{"msg":"Failed to enroll admin user admin: ${error}"}`;
+        res.json(JSON.parse(res_str));
     }
 })
 
