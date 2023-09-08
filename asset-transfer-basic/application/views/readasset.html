@@ -11,21 +11,27 @@
     <body>
         <br>
         <div class="container">
-            <h1>사용자 지갑 생성 페이지</h1>
-            <label> 사용자 ID : </label>
-            <input type="text" class="form-control" id="userid"><br>            
-            <button class="btn btn-success" id="gen-btn">인증서 생성하기</button>
+            <h1>자산조회 페이지</h1>
+            <p>자산조회에 필요한 정보를 입력하시오!</p>
+            <label class="form-label">지갑이름 : </label>
+            <input type="text" id="cert" class="form-control"><br>
+            <label class="form-label">자산아이디 : </label>
+            <input type="text" id="id" class="form-control"><br>
+            <button class="btn btn-warning" id="btn-read">자산조회</button>            
         </div>
         <div class="container" id="result"> </div>
     </body>
     <script>
-        $('#gen-btn').click(()=>{
-            const id = $('#userid').val();
-
-            $.post("/user",{id}, (data)=>{
+        $('#btn-read').click(()=>{            
+            const cert = $('#cert').val()
+            const id = $('#id').val()
+            console.log(cert, id)
+            $.get("/readasset", {cert, id}, (data)=>{
+                console.log(data.msg)
                 $('#result').empty()
-                $('#result').append(data.msg)                
+                $('#result').append(JSON.stringify(data.msg)) 
             })
         })
     </script>
+  
 </html>
