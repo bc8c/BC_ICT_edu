@@ -26,9 +26,24 @@ type Fungus struct{
 	ReadyTime	uint32
 }
 
-// func (s *SmartContract) Initialize()  {
-// 	//  funguscount를 0으로 초기화 시키는 부분
-// }
+func (s *SmartContract) Initialize(ctx contractapi.TransactionContextInterface) error {	
+	
+	// funguscount 값 읽어오기
+	funguscountJSON, err := ctx.GetStub().GetState("funguscount")
+	if err !=nil {
+		 return err
+	}
+	if funguscountJSON != nil{
+		return fmt.Errorf("funguscount is already set")
+	}
+	
+	//  funguscount를 0으로 초기화 시키는 부분
+	err = ctx.GetStub().PutState("funguscount", []byte(strconv.Itoa(0)))
+	if err !=nil {
+		return err
+   	}
+	return nil
+}
 
 func (s *SmartContract) CreateRandomFungus(ctx contractapi.TransactionContextInterface, name string) error {
 
@@ -50,7 +65,7 @@ func (s *SmartContract) CreateRandomFungus(ctx contractapi.TransactionContextInt
 	}
 	// DNA를 생성
 	dna := s._generateRandomDna(name)
-	err = _createFunugs(ctx, name, dna)
+	err = _createFungus(ctx, name, dna)
 	if err !=nil {
 		return err
    	}
@@ -62,7 +77,7 @@ func (s *SmartContract) CreateRandomFungus(ctx contractapi.TransactionContextInt
 	return nil
 }
 
-func _createFunugs(ctx contractapi.TransactionContextInterface, name string, dna uint) error  {
+func _createFungus(ctx contractapi.TransactionContextInterface, name string, dna uint) error  {
 
 	// New 버섯 data를 생성
 	// ID : 생성된 총 버섯수(count) + 1
@@ -133,3 +148,105 @@ func (s *SmartContract) _generateRandomDna(name string) uint {
 
 	return dna	
 } 
+
+func (s *SmartContract) GetFungiByOwner(ctx contractapi.TransactionContextInterface) ([]*Fungus, error) {
+	// ctx를 활용하여 Client ID를 알아내기
+	clientID, err := ctx.GetClientIdentity().GetID()
+	if err !=nil {
+		return nil, fmt.Errorf("failed to get clientID : %v", err)
+   	}
+
+	queryString := fmt.Sprintf( `{"selector":{"owner":"%s"}}`,clientID)
+
+	resultsIterator,err := ctx.GetStub().GetQueryResult(queryString)
+	if err !=nil {
+		return nil, err
+   	}
+	defer resultsIterator.Close()
+
+	var fungi []*Fungus
+	for resultsIterator.HasNext() {
+		queryResult,err := resultsIterator.Next()
+		if err !=nil {
+			return nil, err
+		}
+		var fungus Fungus
+		err = json.Unmarshal(queryResult.Value, &fungus)
+		if err !=nil {
+			return nil, err
+		}
+		fungi = append(fungi, &fungus)
+	}
+
+	return fungi, nil
+}
+
+func (s *SmartContract) TransferFrom(ctx contractapi.TransactionContextInterface, from string, to string, fungusid uint ) error {
+	// 조건1 : from이 함수를 호출한 ClientID와 동일한경우 ( 본인만 )
+	// ctx를 활용하여 Client ID를 알아내기
+	clientID, err := ctx.GetClientIdentity().GetID()
+	if err !=nil {
+		return fmt.Errorf("failed to get clientID : %v", err)
+   	}
+	if clientID != from {
+		return fmt.Errorf("clientID != from ")
+	}
+	// 조건2 : 조회한 버섯의 Owner가 from 이랑 같은경우 ( 버섯의 주인인경우 )
+	fungusBytes, err := ctx.GetStub().GetState(strconv.Itoa(int(fungusid)))
+	if err !=nil {
+		return err
+   	}
+	if fungusBytes == nil { // 거래하고자 하는 버섯이 존재하지 않는경우
+		return fmt.Errorf("not exists fungus")
+	}
+
+	var fungus Fungus
+	err = json.Unmarshal(fungusBytes, &fungus)
+	if err !=nil {
+		return err
+   	}
+	if fungus.Owner != from {
+		return fmt.Errorf("not a fungus owner's request")
+	}
+
+	// from -> to fungusID 의 버섯의 Owner 를 변경해준다.
+	fungus.Owner = to
+
+	fungusJSON, err := json.Marshal(fungus)
+	if err !=nil {
+		return err
+   	}
+	err = ctx.GetStub().PutState(strconv.Itoa(int(fungus.FungusId)), fungusJSON )
+	if err !=nil {
+		return err
+   	}
+
+	// 각각 소유한 버섯 count 갱신하기
+	// from 갱신하기
+	err = s._updateOwnerFungusCount(ctx, from, -1)
+	if err !=nil {
+		return err
+   	}
+
+	// to 갱신하기
+	err = s._updateOwnerFungusCount(ctx, to, 1)
+	if err !=nil {
+		return err
+   	}
+	return nil
+}
+
+func (s *SmartContract)_updateOwnerFungusCount(ctx contractapi.TransactionContextInterface, clientID string, increment int) error {
+	countBytes, err := ctx.GetStub().GetState(clientID)
+	if err !=nil {
+		return err
+   	}
+
+	count,_ := strconv.Atoi(string(countBytes[:]))
+	count += increment
+	err = ctx.GetStub().PutState(clientID, []byte(strconv.Itoa(count)))
+	if err !=nil {
+		return err
+   	}
+	return nil
+}
