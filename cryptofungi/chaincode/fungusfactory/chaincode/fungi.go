@@ -65,7 +65,7 @@ func (s *SmartContract) CreateRandomFungus(ctx contractapi.TransactionContextInt
 	}
 	// DNA를 생성
 	dna := s._generateRandomDna(name)
-	err = _createFungus(ctx, name, dna)
+	err = s._createFungus(ctx, name, dna)
 	if err !=nil {
 		return err
    	}
@@ -77,7 +77,7 @@ func (s *SmartContract) CreateRandomFungus(ctx contractapi.TransactionContextInt
 	return nil
 }
 
-func _createFungus(ctx contractapi.TransactionContextInterface, name string, dna uint) error  {
+func (s *SmartContract)_createFungus(ctx contractapi.TransactionContextInterface, name string, dna uint) error  {
 
 	// New 버섯 data를 생성
 	// ID : 생성된 총 버섯수(count) + 1
@@ -248,5 +248,86 @@ func (s *SmartContract)_updateOwnerFungusCount(ctx contractapi.TransactionContex
 	if err !=nil {
 		return err
    	}
+	return nil
+}
+
+func (s *SmartContract)Feed(ctx contractapi.TransactionContextInterface, fungusid uint, feedid uint) error {
+	
+	
+	// Feed 함수(기능)에 포함되어야 할 중요 작업들
+
+	//  1. fungusid를 이용하여 버섯의 DNA를 획득
+	fungusBytes, err := ctx.GetStub().GetState(strconv.Itoa(int(fungusid)))
+	if err !=nil {
+		return err
+   	}
+	if fungusBytes == nil {
+		return fmt.Errorf("not exists fungus")
+	}
+
+	var fungus Fungus
+
+	err = json.Unmarshal(fungusBytes, &fungus)
+	if err !=nil {
+		return err
+   	}
+
+	// 버섯의 ReadyTime 을 체크해서 증식가능한 시간인지 확이후 진행 해야함
+	// 버섯의 ReadyTime < 현재시간
+	nowTime := time.Now()
+	unixtime := nowTime.Unix()
+
+	if fungus.ReadyTime > uint32(unixtime) {
+		return fmt.Errorf("failed to feed ( not Ready )")
+	}
+
+	//  2. feedid를 이용하여 먹이의 DNA를 획득
+	params := []string{"GetFeed", strconv.Itoa(int(feedid))}
+	invokeargs := make([][]byte, len(params))
+
+	for i, arg := range params {
+		invokeargs[i] = []byte(arg)
+	}
+
+	result := ctx.GetStub().InvokeChaincode("feedfactory", invokeargs, "mychannel")
+
+	if result.Status !=200 {
+		return fmt.Errorf("failed to InvokeChincode")
+	}
+
+	var feed struct{		
+		Dna			uint
+	}
+	json.Unmarshal(result.Payload, &feed)
+
+	//  3. 버섯DNA와 먹이DNA를 결합하여 새로운 버섯의 DNA를 생성
+	err = s._feedAndMultiply(ctx, fungus.Dna, feed.Dna)
+	if err !=nil {
+		return err
+   	}
+
+
+	// 버섯이 증식되고 나면 소유한 버섯의 숫자count를 증가 시켜야함
+	err = s._updateOwnerFungusCount(ctx, fungus.Owner, 1)
+	if err != nil {
+		return err
+   	}
+
+	return nil	
+}
+
+func  (s *SmartContract)_feedAndMultiply(ctx contractapi.TransactionContextInterface, fungusDna uint, feedDna uint) error  {
+	//  4. 새로운 버섯의 정보들을 모두 입력하여 원장에 저장
+	//  버섯 DNA와 먹이 DNA의 평균
+	var newDna uint = (fungusDna + feedDna) / 2
+	//  평균값의 맨 뒤 두자리를 01로 고정 변환
+	newDna = newDna - (newDna % 100) + 1
+	//  생성된 DNA로 새 버섯을 생성하여 원장에 저장
+
+	err := s._createFungus(ctx, "noname", newDna)
+	if err !=nil {
+		return err
+   	}
+
 	return nil
 }
