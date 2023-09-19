@@ -156,7 +156,7 @@ func (s *SmartContract) GetFungiByOwner(ctx contractapi.TransactionContextInterf
 		return nil, fmt.Errorf("failed to get clientID : %v", err)
    	}
 
-	queryString := fmt.Sprintf( `{"selector":{"owner":"%s"}}`,clientID)
+	queryString := fmt.Sprintf( `{"selector":{"Owner":"%s"}}`,clientID)
 
 	resultsIterator,err := ctx.GetStub().GetQueryResult(queryString)
 	if err !=nil {

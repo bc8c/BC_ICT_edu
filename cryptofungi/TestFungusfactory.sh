@@ -49,7 +49,7 @@ peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.exa
 cat log.txt
 sleep 3
 
-## TEST2 : Query the chaincode
+## TEST3 : Query the chaincode
 infoln "TEST3 : Query the chaincode"
 set -x
 peer chaincode query -C $CHANNEL_NAME -n ${CC_NAME} -c '{"Args":["GetFungiByOwner"]}' >&log.txt
