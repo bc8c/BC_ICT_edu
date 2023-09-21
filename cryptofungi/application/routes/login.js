@@ -22,6 +22,8 @@ router.post('/', async function(req, res, next) {
     return
   }
 
+  res.cookie("USER", JSON.stringify(user))
+
   res.redirect('/')
 
 });

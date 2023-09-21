@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var users = require('../public/javascripts/users')
+var cert = require('../public/javascripts/cert')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -23,7 +24,9 @@ router.post('/', async function(req, res, next) {
   const newUser = { userid, name, password }
 
   await users.createUser(newUser)
+  await cert.makeUserWallet(userid)
 
+  res.cookie("USER", JSON.stringify(newUser))
   res.redirect('/')
 });
 
