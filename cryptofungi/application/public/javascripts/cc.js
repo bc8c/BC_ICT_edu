@@ -48,6 +48,12 @@ async function cc_call(id, fn_name, args){
         } else if (fn_name == "CreateRandomFungus"){
             // CreateRandomFungus 호출시
             result = await contract.submitTransaction(fn_name, args)
+        } else if (fn_name == "Feed"){
+            // CreateRandomFungus 호출시
+            result = await contract.submitTransaction(fn_name, args[0], args[1])
+        } else if (fn_name == "TransferFrom"){
+            // CreateRandomFungus 호출시
+            result = await contract.submitTransaction(fn_name, args[0], args[1], args[2])
         } else result = "not supported function name"        
 
         console.log("Transaction has been submitted");
