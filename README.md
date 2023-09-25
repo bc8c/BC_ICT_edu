@@ -1,3 +1,7 @@
+## 교육 및 질의 응답을 위한 학습방 ( 오픈 카톡 )
+- https://open.kakao.com/o/g7X7d6If
+- PW : 230925
+
 ## TAG를 이용하여 해당 교육 자료 clone 하는법
  - git checkout tags/태그번호
  - 예시> git checkout tags/2308NT_ICT
