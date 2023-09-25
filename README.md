@@ -8,4 +8,4 @@
 - 교육명 : 나도 할 수 있다! 미니 프로젝트 따라하기 ICT 서울교육
 - 교육시간 : 저녁, 실시간 온라인
 - TAG : 2308NT_ICT
-- ling : https://github.com/bc8c/BC_ICT_edu/tree/2308NT_ICT
+- link : https://github.com/bc8c/BC_ICT_edu/tree/2308NT_ICT
