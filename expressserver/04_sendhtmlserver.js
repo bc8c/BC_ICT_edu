@@ -13,16 +13,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 
 
 app.get('/out', (req, res) => {
-    
-    // req 안에 있는 url부분에서 데이터를 추출 하고 싶다!
-    console.log(req.query.name)
- 
-    console.log(req.query.age)
-
-    const name = req.query.name
-    const age = req.query.age
-
-    res.send(`name:${name} age:${age}`)
+    res.sendFile(__dirname+"/views/example.html")
 })
 
 app.listen(PORT, HOST)

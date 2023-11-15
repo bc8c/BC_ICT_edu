@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div style="background-color: brown;">
+        <h1>bodyscript 실습 페이지 입니다.</h1>
+        <hr>
+    </div>
+    
+    <div>
+        <label> 이름 : </label>
+        <input type="text" id="Name"><br><br>
+        <label> 나이 : </label>
+        <input type="text" id="Age"><br><br>
+        <button id="btn_send">제출</button>
+        <button id="btn_init">초기화</button>
+    </div>
+    <div id="result"></div>        
+</body>
+<script>
+    //  제출 버튼이 눌렸을때 서버에 Request를 보내는 작업
+    //  1. 메소드 : post
+    //  2. URL : /over
+    //  3. DATA : Name, Age
+
+    $("#btn_send").click(()=>{
+        console.log("제출버튼이 클릭되었습니다.")
+        const name = $("#Name").val()
+        const age = $("#Age").val()
+
+        $.post("/over", {name,age}, (data)=>{
+            // data = {"msg":"저장하기 싫어요!!!"}
+             console.log(data)
+             var text
+             if (data.msg == "ok")
+             {
+                text = "저장이 완료되었습니다."
+             } else {
+                text = "저장이 실패었습니다."
+             }
+             $("#result").empty()
+             $("#result").append("<p> 결과가 도착했습니다 </p>")
+             $("#result").append("<p>"+text+"</p>")
+        })
+    })
+
+    $("#btn_init").click(()=>{
+        $("#result").empty()
+    })
+
+</script>
+</html>
