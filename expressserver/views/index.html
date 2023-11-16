@@ -18,13 +18,22 @@
         <label> 패스워드 : </label>
         <input id="in_PW" type="text" class="form-control"><br>
         <button id="btn_login" class="btn btn-primary">로그인</button>
+        <button id="btn_logout" class="btn btn-secondary">로그아웃</button>
+        <br>
         <div id="result" class="container"></div>
+        <br>
         <button id="btn_webtoon" class="btn btn-warning">웹툰보러가기</button>
     </div>
 
     
 </body>
-<script>    
+<script>
+    
+    $("#btn_logout").click(()=>{
+        $.post("/logout", {}, (data)=>{
+            document.write(data)            
+        })
+    })
 
     $("#btn_login").click(()=>{
         console.log("로그인버튼이 클릭되었습니다.")

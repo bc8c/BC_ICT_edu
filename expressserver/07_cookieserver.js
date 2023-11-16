@@ -42,6 +42,11 @@ app.post("/in", (req, res) =>{
     res.json(JSON.parse(res_str))
 })
 
+app.post("/logout", (req, res) =>{
+    res.clearCookie("logincookie")
+    res.sendFile(__dirname+"/views/index.html")
+})
+
 app.post("/webtoon", (req, res) =>{
     const userCookie = req.cookies["logincookie"]
     console.log(req.cookies)

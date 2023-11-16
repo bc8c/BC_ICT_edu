@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <% if (count==100){ %>
+        <h1><%= name %> 님진짜 환영합니다.</h1>
+    <% } else {%>
+        <% for (let a =0; a < count; a ++) {  %>
+            <p><%= name %> 님환영합니다. 반복횟수는 <%= a %> 입니다</p>
+        <% } %>
+    <% } %>
+
+</body>
+
+</html>
