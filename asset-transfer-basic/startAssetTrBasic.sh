@@ -17,3 +17,9 @@ sleep 5
 ./deployCC.sh
 
 popd
+
+pushd application/ccp
+
+./ccp-generate.sh
+
+popd
