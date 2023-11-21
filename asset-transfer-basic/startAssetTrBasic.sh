@@ -23,3 +23,9 @@ pushd application/ccp
 ./ccp-generate.sh
 
 popd
+
+pushd application
+
+rm -rf wallet
+
+popd
