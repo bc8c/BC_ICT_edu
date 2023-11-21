@@ -13,6 +13,52 @@
         <title>자산관리사이트</title>
     </head>
     <body>
-        <p>자산조회 페이지 입니다.</p>
+        <div class="container">
+            <h3>자산조회 페이지 입니다.</h3>
+            <p>자산조회에 필요한 정보를 입력하세요</p>
+
+            <label class="form-label">자산아이디 : </label><br>
+            <input id="assetID" type="text" class="form-control"><br>
+            
+            
+            <button id="btn_read" class="btn btn-primary">자산조회하기</button>
+            <div id="resultdiv" class="container" style="background-color: rgb(250, 239, 137);"></div>
+        </div>
+        
+        
     </body>
+
+    <script>
+        $("#btn_read").click(()=>{
+
+            const ID = $("#assetID").val()           
+
+            $.post("/asset/read", {ID}, (data)=>{
+                console.log(JSON.stringify(data))
+                console.log(JSON.stringify(data.msg))
+                console.log(data.resultcode)
+                // TODO : 데이터 처리하는 부분 
+                if (data.resultcode == "success"){
+                    $("#resultdiv").empty()
+                    $("#resultdiv").append(`<h3>축하합니다. 자산조회 완료</h3>`)
+                    // 1. result 직접 편집 하는 방법
+                    // $("#resultdiv").append(`<p>아이디 : ${data.ID}</p>`)
+                    // $("#resultdiv").append(`<p>색  상 : ${data.color}</p>`)
+                    // $("#resultdiv").append(`<p>사이즈 : ${data.size}</p>`)
+                    // $("#resultdiv").append(`<p>소유주 : ${data.owner}</p>`)
+                    // $("#resultdiv").append(`<p>자간값 : ${data.appraisedValue}</p>`)
+
+                    // 2. result 그대로 사용하는 방법
+                    $("#resultdiv").append(`<p>아이디 : ${data.msg.ID}</p>`)
+                    $("#resultdiv").append(`<p>색  상 : ${data.msg.color}</p>`)
+                    $("#resultdiv").append(`<p>사이즈 : ${data.msg.size}</p>`)
+                    $("#resultdiv").append(`<p>소유주 : ${data.msg.owner}</p>`)
+                    $("#resultdiv").append(`<p>자간값 : ${data.msg.appraisedValue}</p>`)
+                } else {
+                    $("#resultdiv").empty()
+                    $("#resultdiv").append(`<h3>자산조회 실패</h3>`)                    
+                }
+            })
+        })
+    </script>
 </html>

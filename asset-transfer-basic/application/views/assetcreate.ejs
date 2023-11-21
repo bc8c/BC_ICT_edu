@@ -57,7 +57,14 @@
                     $("#resultdiv").fadeOut(2000)
                     $("#resultdiv").fadeIn(1000)
                     $("#resultdiv").fadeOut(2000)
-                } 
+                } else {
+                    $("#resultdiv").empty()
+                    $("#resultdiv").append(`<h3>자산생성 실패</h3>`)
+                    $("#resultdiv").fadeIn(1000)
+                    $("#resultdiv").fadeOut(2000)
+                    $("#resultdiv").fadeIn(1000)
+                    $("#resultdiv").fadeOut(2000)
+                }
             })
         })
     </script>
