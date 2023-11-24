@@ -60,6 +60,9 @@ func (s *SmartContract) RegisterCar(ctx contractapi.TransactionContextInterface,
 	nowTime := time.Now()
 	unixTime := int(nowTime.Unix())
 
+	// owner 정보에 빈 슬라이스 만들어 할당하기
+	owner := make ([]string, 0)
+
 	// 차량정보 데이터 생성
 	carinfo := CarInfo{
 		CID			: carID,
@@ -68,16 +71,54 @@ func (s *SmartContract) RegisterCar(ctx contractapi.TransactionContextInterface,
 		Price		: price,
 		RegDate		: unixTime,
 		Available	: false,
+		Owner		: owner,
 	}
 
 	assetJSON, err = json.Marshal(carinfo)
 	if err != nil {
 		return err
 	}
+
+	ctx.GetStub().PutState("CARCOUNT",[]byte(strconv.Itoa(carcountINT)))
 	
 	return ctx.GetStub().PutState(carID, assetJSON)
 }
 
+
+// 단일 차량 정보 조회 기능
+func (s *SmartContract) QueryCarInfo(ctx contractapi.TransactionContextInterface, carID string) (*CarInfo, error) {
+	carAsBytes, err := ctx.GetStub().GetState(carID)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+
+	if carAsBytes == nil {
+		return nil, fmt.Errorf("%s does not exist", carID)
+	}
+
+	carInfo := new(CarInfo)
+	_ = json.Unmarshal(carAsBytes, carInfo)
+	
+	return carInfo, nil
+}
+
+// 본인 소유 차량 리스트 조회하기
+func (s *SmartContract) QueryOwnedCarList(ctx contractapi.TransactionContextInterface, uid string) ([]string, error) {
+
+	listAsBytes, err := ctx.GetStub().GetState(uid)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+	if listAsBytes == nil {
+		return nil, nil
+	}
+
+	user := new(User)
+	_ = json.Unmarshal(listAsBytes, user)
+
+	return user.CarList, nil	
+}
 
 // 차량구매 파티원을 모집해서 동시에 구매 하도록 ( 관리자가 구매상태를 업데이트 하는 방식으로 처리 )
 //.=> 차량 정보의 소유주, 만료기간, Available 을 갱신

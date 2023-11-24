@@ -1,0 +1,1 @@
+{"cid":"CAR2","Name":"eliceCar2","color":"purple","owner":["","","","",""],"price":300,"RegDate":1700796603,"renter":"","expiration":0,"available":false}
