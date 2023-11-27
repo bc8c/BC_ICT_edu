@@ -52,7 +52,7 @@ sleep 3
 ## TEST3 : Invoking the chaincode
 infoln "TEST2-1 : Query the chaincode (QueryCarInfo)"
 set -x
-peer chaincode query -C $CHANNEL_NAME -n ${CC_NAME} -c '{"function":"QueryCarInfo","Args":["CAR8"]}' >&log.txt
+peer chaincode query -C $CHANNEL_NAME -n ${CC_NAME} -c '{"function":"QueryCarInfo","Args":["CAR1"]}' >&log.txt
 { set +x; } 2>/dev/null
 cat log.txt
 sleep 3
@@ -61,6 +61,23 @@ sleep 3
 infoln "TEST2-2 : Query the chaincode (QueryCarInfo)"
 set -x
 peer chaincode query -C $CHANNEL_NAME -n ${CC_NAME} -c '{"function":"QueryCarInfo","Args":["CAR2"]}' >&log.txt
+{ set +x; } 2>/dev/null
+cat log.txt
+sleep 3
+
+
+## TEST3 : Invoking the chaincode
+infoln "TEST3-1 : Invoking the chaincode (PurchaseCar)"
+set -x
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n ${CC_NAME} $PEER_CONN_PARMS -c '{"function":"PurchaseCar","Args":["admin", "CAR1", "Tom"]}' >&log.txt
+{ set +x; } 2>/dev/null
+cat log.txt
+sleep 3
+
+## TEST3 : Invoking the chaincode
+infoln "TEST3-2 : Invoking the chaincode (PurchaseCar)"
+set -x
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n ${CC_NAME} $PEER_CONN_PARMS -c '{"function":"PurchaseCar","Args":["admin", "CAR1", "BoB"]}' >&log.txt
 { set +x; } 2>/dev/null
 cat log.txt
 sleep 3

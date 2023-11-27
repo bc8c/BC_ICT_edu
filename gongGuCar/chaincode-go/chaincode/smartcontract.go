@@ -122,6 +122,54 @@ func (s *SmartContract) QueryOwnedCarList(ctx contractapi.TransactionContextInte
 
 // 차량구매 파티원을 모집해서 동시에 구매 하도록 ( 관리자가 구매상태를 업데이트 하는 방식으로 처리 )
 //.=> 차량 정보의 소유주, 만료기간, Available 을 갱신
+func (s *SmartContract) PurchaseCar(ctx contractapi.TransactionContextInterface, uid string, cid string, newOwner string) error {
+	// 접근제어 (AccessContorl)
+	if uid != "admin" {
+		return fmt.Errorf("Caller is not admin")
+	}
+	carInfo, err := s.QueryCarInfo(ctx, cid)
+	if err != nil {
+		return err
+	}	
+
+	carInfo.Owner = append(carInfo.Owner,newOwner)
+
+	assetJSON, err := json.Marshal(carInfo)
+	if err != nil {
+		return err
+	}	
+	ctx.GetStub().PutState(cid, assetJSON)
+	if err != nil {
+		return err
+	}	
+	
+	//  각각의 User 정보에 보유 차량 리스트 추가하기
+	listAsBytes, err := ctx.GetStub().GetState(newOwner)
+	if err != nil {
+		return fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+
+	user := new(User)
+	if listAsBytes != nil {
+		_ = json.Unmarshal(listAsBytes, user)
+	} else {
+		user.UID = newOwner
+	}
+
+	user.CarList = append(user.CarList, cid)
+
+	assetJSON, err = json.Marshal(user)
+	if err != nil {
+		return err
+	}
+	
+	ctx.GetStub().PutState(newOwner, assetJSON)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 // 차량대여기능
 // 차량반납기능

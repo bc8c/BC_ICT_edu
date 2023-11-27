@@ -1,1 +1,1 @@
-{"cid":"CAR2","Name":"eliceCar2","color":"purple","owner":["","","","",""],"price":300,"RegDate":1700796603,"renter":"","expiration":0,"available":false}
+[34m2023-11-27 04:02:30.920 UTC [chaincodeCmd] chaincodeInvokeOrQuery -> INFO 001[0m Chaincode invoke successful. result: status:200 
