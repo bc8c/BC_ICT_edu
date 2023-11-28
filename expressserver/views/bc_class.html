@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    </head>
+    <body>        
+        <img id="menuimg" onmouseout="out(this)" onmouseover="over(this)" src="https://nenechicken.com/17_new/images/menu/30001.jpg" width="300px">
+        <p id="menutext">오늘메뉴는 치킨입니다.</p>
+        <p id="menutext2">맛있게 드세요</p>
+    </body>
+    
+    <script>
+        var menu = prompt("오늘의 야식 메뉴를 입력해주세요.")
+        var price = prompt("선택한 메뉴의 가격을 입력해 주세요")
+        var size = prompt("그림 크기를 입력해주세요")
+       
+        $("#menuimg").attr("width", size)
+        $("#menutext").text("오늘 야식 메뉴는 "+menu+"입니다.")
+        $("#menutext2").text("선택해신 메뉴의 가격은 " + price + "원 입니다.")                
+    </script>
+  
+</html>
