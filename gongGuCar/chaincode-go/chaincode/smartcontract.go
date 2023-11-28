@@ -133,6 +133,7 @@ func (s *SmartContract) PurchaseCar(ctx contractapi.TransactionContextInterface,
 	}	
 
 	carInfo.Owner = append(carInfo.Owner,newOwner)
+	carInfo.Available = true
 
 	assetJSON, err := json.Marshal(carInfo)
 	if err != nil {
@@ -172,4 +173,72 @@ func (s *SmartContract) PurchaseCar(ctx contractapi.TransactionContextInterface,
 }
 
 // 차량대여기능
+func (s *SmartContract) RenteCar(ctx contractapi.TransactionContextInterface, uid string, cid string) error {
+	carInfo, err := s.QueryCarInfo(ctx, cid)
+	if err != nil {
+		return err
+	}
+
+	// 접근제어 (AccessContorl) 차량 주인만 가능
+	var exist bool = false
+	for _, owner := range carInfo.Owner{
+		if uid == owner{
+			exist = true
+		}
+	}
+	if exist == false {
+		return fmt.Errorf("The user does not own the car.")
+	}
+
+	// 접근제어 (AccessContorl) 현재 이미 대여중인 차량은 안됨
+	if carInfo.Available != true {
+		return fmt.Errorf("The car is already being rented.")
+	}
+
+	// 현재시간 (등록시간) 생성
+	nowTime := time.Now()
+	unixTime := int(nowTime.Unix())
+	carInfo.Expiration = unixTime + 24*60*60
+	carInfo.Available = false
+	carInfo.Renter = uid
+
+	assetJSON, err := json.Marshal(carInfo)
+	if err != nil {
+		return err
+	}
+
+	err =ctx.GetStub().PutState(cid, assetJSON)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 // 차량반납기능
+func (s *SmartContract) ReturnCar(ctx contractapi.TransactionContextInterface, uid string, cid string) error {
+	carInfo, err := s.QueryCarInfo(ctx, cid)
+	if err != nil {
+		return err
+	}
+
+	// 접근제어 (AccessContorl) 본인이 대여중인 차량이 맞는지
+	if carInfo.Renter != uid {
+		return fmt.Errorf("The car is not a rented car")
+	}
+
+	carInfo.Expiration = 0
+	carInfo.Available = true
+	carInfo.Renter = ""
+
+	assetJSON, err := json.Marshal(carInfo)
+	if err != nil {
+		return err
+	}
+
+	err =ctx.GetStub().PutState(cid, assetJSON)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

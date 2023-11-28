@@ -81,3 +81,21 @@ peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.exa
 { set +x; } 2>/dev/null
 cat log.txt
 sleep 3
+
+
+## TEST4 : Invoking the chaincode
+infoln "TEST4-1 : Invoking the chaincode (RenteCar)"
+set -x
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n ${CC_NAME} $PEER_CONN_PARMS -c '{"function":"RenteCar","Args":["Tom", "CAR1"]}' >&log.txt
+{ set +x; } 2>/dev/null
+cat log.txt
+sleep 3
+
+
+## TEST4 : Invoking the chaincode
+infoln "TEST4-1 : Invoking the chaincode (ReturnCar)"
+set -x
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n ${CC_NAME} $PEER_CONN_PARMS -c '{"function":"ReturnCar","Args":["Tom", "CAR1"]}' >&log.txt
+{ set +x; } 2>/dev/null
+cat log.txt
+sleep 3
