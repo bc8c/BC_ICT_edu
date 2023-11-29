@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><%=title%></title>
+    </head>
+    <body>
+        <h1>환영합니다</h1>
+        <p>방문객 여러분들을 진심으로 환영합니다.</p>
+        <% for (var i = 0; i < 5;i++){ %>
+            <P>너무 차가운 겨울이네요</P>
+        <% } %>
+
+        <% if (season == 0){ %>
+            <img width="300" src="https://cdn.crowdpic.net/detail-thumb/thumb_d_E0ABB9886C3013C3032AEBE967540F8F.jpg">
+        <% } else if (season == 1){ %>
+            <img width="300" src="https://t1.daumcdn.net/cfile/tistory/220E5C41557200B223">
+        <% } else if (season == 2){ %>
+            <img width="300" src="https://t1.daumcdn.net/cfile/tistory/990822335A03045709">
+        <% } else if (season == 3){ %>
+            <img width="300" src="https://previews.123rf.com/images/elen/elen1611/elen161100049/67640132-%EA%B2%A8%EC%9A%B8-%ED%92%8D%EA%B2%BD.jpg">
+        <% } %>
+    </body>   
+</html>
