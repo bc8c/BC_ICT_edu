@@ -21,7 +21,7 @@ router.post("/login", async(req,res)=>{
     }
 
     // 로그인처리 ( 쿠키생성 )
-    cookie_str = `{userid:${user.userid}, username:${user.username}, level:1}`
+    cookie_str = `{"userid":"${user.userid}", "username":"${user.username}", "level":1}`
     res.cookie("USER", cookie_str)
 
     res.redirect("/")
@@ -50,7 +50,7 @@ router.post("/signup", async(req,res)=>{
     }
 
     await createUser(newUser)
-    res.send("회원가입이 완료되었습니다.")
+    res.redirect("/")
 })
 
 async function fetchAllUsers(){
