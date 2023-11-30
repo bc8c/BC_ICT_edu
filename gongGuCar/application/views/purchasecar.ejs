@@ -16,6 +16,47 @@
         <div class="container">
             <br>
             <h3>차량구입 화면입니다!</h3>
-            <p>차량구입에 필요한 정보를 입력해주세요</p>           
+            <p>차량구입에 필요한 정보를 입력해주세요</p>
+            
+            <label class="form-label">차량아이디 : </label>
+            <input class="form-control" type="text" id="carid">
+            <br>
+            
+            <label class="form-label">차량구매자 : </label>
+            <input class="form-control" type="text" id="newOwner">
+            <br>                       
+            <button id="btn_purchase" class="btn btn-warning">차량소유등록하기</button>
+        </div>
+        <div id="resultdiv" class="container"></div>
     </body>
+
+    <script>
+        $("#btn_purchase").click(()=>{
+            const carid = $("#carid").val()
+            const newOwner = $("#newOwner").val()
+            console.log(carid, newOwner)
+            $("#resultdiv").empty()
+            $("#resultdiv").fadeIn(1000)
+            $("#resultdiv").append(`<h3>잠시기다려주세요</h3>`)
+
+            $.post("/chaincode/purchasecar", {carid,newOwner}, (data)=>{
+                if (data.resultcode == "success"){
+                    $("#resultdiv").empty()
+                    $("#resultdiv").append(`<h3>${data.msg}</h3>`)
+                    $("#resultdiv").append("<p>추가된 소유주 ID : "+newOwner+"</p>")
+                    $("#resultdiv").fadeIn(1000)
+                    $("#resultdiv").fadeOut(2000)
+                    $("#resultdiv").fadeIn(1000)
+                    $("#resultdiv").fadeOut(2000)
+                } else {
+                    $("#resultdiv").empty()
+                    $("#resultdiv").append(`<h3>${data.msg}</h3>`)
+                    $("#resultdiv").fadeIn(1000)
+                    $("#resultdiv").fadeOut(2000)
+                    $("#resultdiv").fadeIn(1000)
+                    $("#resultdiv").fadeOut(2000)
+                }
+            })
+        })
+    </script>
 </html>
