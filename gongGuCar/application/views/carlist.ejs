@@ -16,22 +16,9 @@
         <div class="container">
             <br>
             <h3>공구카에 오신것을 환영합니다!</h3>
-            <p>로그인을 수행해 주십시오</p>
+            <a href="/user/logout">로그아웃하기</a>
+            
 
-            <form action="/user/login" method="post">
-                <div class="form-floating">                    
-                    <input class="form-control" type="text" name="userid" placeholder="id">
-                    <label for="userid" class="form-label">아이디 : </label>
-                </div>               
-                <br>
-                <div class="form-floating"> 
-                    <input class="form-control" type="password" name="userpw" placeholder="pw">
-                    <label for="userpw" class="form-label">비밀번호 : </label>
-                </div>
-                
-                <br>
-                <button formaction="/user/login" class="btn btn-primary">로그인하기</button>
-                <button formaction="/user/register" class="btn btn-warning">회원가입</button>
-            </form>
+         
     </body>
 </html>

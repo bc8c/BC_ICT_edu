@@ -19,6 +19,16 @@ router.post("/login", async(req,res)=>{
         res.send("비밀번호가 틀렸습니다.")
         return
     }
+
+    // 로그인처리 ( 쿠키생성 )
+    cookie_str = `{userid:${user.userid}, username:${user.username}, level:1}`
+    res.cookie("USER", cookie_str)
+
+    res.redirect("/")
+})
+
+router.get("/logout", (req,res)=>{
+    res.clearCookie("USER")
     res.redirect("/")
 })
 
@@ -29,8 +39,8 @@ router.post("/register", (req,res)=>{
 
 router.post("/signup", async(req,res)=>{
     // 회원가입을 수행하는 루틴
-    const {userid,userpw,username,userlicense} = req.body
-    const newUser = {userid,userpw,username,userlicense}
+    const {userid,userpw,username,userlicense,residence} = req.body
+    const newUser = {userid,userpw,username,userlicense,residence}
 
     const exist = await fetchUser(userid)
 

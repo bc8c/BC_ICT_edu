@@ -19,6 +19,7 @@ var userRouter = require("./routes/user")
 app.use(express.static(path.join(__dirname, "views")));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
+app.use(cookieParser());
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -27,11 +28,18 @@ app.set('view engine', 'ejs');
 app.use("/user", userRouter)
 
 app.get("/", (req,res)=>{
-    // 로그인이 안되었을떄
-    res.render("index")
 
-    // 로그인이 되었을때
-    // 자신이 보유한 차량 리스트가 보이는 화면으로 랜더링
+    const userCookie = req.cookies[`USER`]
+    console.log(userCookie)  
+
+    // 로그인이 안되었을떄
+    if (!userCookie){
+        res.render("index")
+    } else {
+        // 로그인이 되었을때
+        // 자신이 보유한 차량 리스트가 보이는 화면으로 랜더링
+        res.render("carlist")
+    }   
 })
 
 
