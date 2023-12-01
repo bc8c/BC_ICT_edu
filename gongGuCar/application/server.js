@@ -16,6 +16,7 @@ const HOST = "0.0.0.0";
 var userRouter = require("./routes/user")
 var adminRouter = require("./routes/admin")
 var chaincodeRouter = require("./routes/chaincode")
+var memberRouter = require("./routes/member")
 
 // 미들웨어 등록부분
 app.use(express.static(path.join(__dirname, "views")));
@@ -30,6 +31,7 @@ app.set('view engine', 'ejs');
 app.use("/user", userRouter)
 app.use("/admin", adminRouter)
 app.use("/chaincode", chaincodeRouter)
+app.use("/member", memberRouter)
 
 app.get("/", (req,res)=>{
     const userCookie = req.cookies[`USER`]
@@ -43,9 +45,9 @@ app.get("/", (req,res)=>{
         // 자신이 보유한 차량 리스트가 보이는 화면으로 랜더링        
         userData = JSON.parse(userCookie)
         if (userData.userid == "admin"){
-            res.render("carlist",{userclass:"admin",username:userData.username})
+            res.redirect("/admin/carlist")
         } else {
-            res.render("carlist",{userclass:"user",username:userData.username})
+            res.redirect("/member/carlist")
         }        
     }   
 })
