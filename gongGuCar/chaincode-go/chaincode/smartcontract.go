@@ -111,7 +111,7 @@ func (s *SmartContract) QueryOwnedCarList(ctx contractapi.TransactionContextInte
 		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
 	}
 	if listAsBytes == nil {
-		return nil, nil
+		return nil, fmt.Errorf("Failed to read from world state.")
 	}
 
 	user := new(User)

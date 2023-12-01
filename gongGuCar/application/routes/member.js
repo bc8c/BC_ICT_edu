@@ -14,11 +14,15 @@ router.get("/carlist", async(req,res)=>{
 
     result= await chaincode.QueryOwnedCarList(userData.userid)
 
-    console.log(result)
-
-    resultData = JSON.parse(result)
     
-    res.render("carlist",{userclass:"user",username:userData.username, carlist:resultData.msg})
+    
+    console.log(result)
+    resultData = JSON.parse(result)
+    if (resultData.resultcode=="failed") {
+        res.render("carlist",{userclass:"user",username:userData.username, carlist:[]})
+    } else {        
+        res.render("carlist",{userclass:"user",username:userData.username, carlist:resultData.msg})
+    }
 })
 
 
